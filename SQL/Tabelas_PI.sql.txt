@@ -1,0 +1,79 @@
+CREATE TABLE Tipos_usuarios (
+    id INT PRIMARY KEY,
+    Nome_tipo VARCHAR(45)
+);
+
+CREATE TABLE Usuarios (
+    id INT PRIMARY KEY,
+    id_tipo INT,
+    Nome VARCHAR(45),
+    Email VARCHAR(45),
+    Documento VARCHAR(15),
+    CEP VARCHAR(11),
+    Numero INT,
+    Senha VARCHAR(45),
+    FOREIGN KEY (id_tipo) REFERENCES Tipos_usuarios(id)
+);
+
+CREATE TABLE Estados (
+    id INT PRIMARY KEY,
+    Nome_UF VARCHAR(45),
+    Valor DECIMAL(8,2),
+    taxa INT
+);
+
+CREATE TABLE Fornecedores (
+    id INT PRIMARY KEY,
+    id_usuariof INT,
+    id_estado INT,
+    Razao_social VARCHAR(45),
+    Telefone_comercial VARCHAR(45),
+    FOREIGN KEY (id_usuariof) REFERENCES Usuarios(id),
+    FOREIGN KEY (id_estado) REFERENCES Estados(id)
+);
+
+CREATE TABLE Ofertas (
+    id INT PRIMARY KEY,
+    id_fornecedor INT,
+    Valor_credito DECIMAL(8,2),
+    Data_emissao VARCHAR(6),
+    Quantidade_disp INT,
+    disponibilidade TINYINT,
+    Quant_ofertada INT,
+    FOREIGN KEY (id_fornecedor) REFERENCES Fornecedores(id)
+);
+
+CREATE TABLE Clientes (
+    id INT PRIMARY KEY,
+    id_usuarioC INT,
+    Telefone_pessoal VARCHAR(45),
+    Descricao VARCHAR(150),
+    FOREIGN KEY (id_usuarioC) REFERENCES Usuarios(id)
+);
+
+CREATE TABLE Vendas (
+    id INT PRIMARY KEY,
+    id_credito INT,
+    id_cliente INT,
+    Quantidade_compra INT,
+    Data_transacao VARCHAR(6),
+    Valor_transacao DECIMAL(8,2),
+    FOREIGN KEY (id_credito) REFERENCES Ofertas(id),
+    FOREIGN KEY (id_cliente) REFERENCES Clientes(id)
+);
+
+CREATE TABLE tipo_pagamento (
+    id INT PRIMARY KEY,
+    nome_tipo VARCHAR(45)
+);
+
+CREATE TABLE Pagamento (
+    id INT PRIMARY KEY,
+    id_compra INT,
+    id_tipo_pagamento INT,
+    Valor_pago DECIMAL(8,2),
+    Data_pagamento VARCHAR(6),
+    num_titulo INT,
+    FOREIGN KEY (id_compra) REFERENCES Vendas(id),
+    FOREIGN KEY (id_tipo_pagamento) REFERENCES tipo_pagamento(id)
+);
